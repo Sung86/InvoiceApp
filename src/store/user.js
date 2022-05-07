@@ -1,11 +1,9 @@
 import { logInWithEmailAndPassword } from '@/apis/authentication';
 
-const initialState = () => {
-	return {
-		user: {},
-		isSignIn: false,
-	};
-};
+const initialState = () => ({
+	user: {},
+	isSignIn: false,
+});
 
 const state = () => initialState();
 

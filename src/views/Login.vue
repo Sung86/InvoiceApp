@@ -77,7 +77,7 @@ export default {
 			const data = { email: this.email, password: this.password };
 			const result = await this.signIn(data);
 			if (result === false) this.isSignInError = true;
-			else this.$router.push({ name: 'Contracts' });
+			else this.$router.push({ name: 'Clients' });
 			this.isOnSubmit = false;
 		},
 	},

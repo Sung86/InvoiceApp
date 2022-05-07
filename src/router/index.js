@@ -29,6 +29,12 @@ const routes = [
 			import(/* webpackChunkName: "contracts" */ '@/views/Invoices'),
 	},
 	{
+		path: '/billTo',
+		name: 'BillTo',
+		component: () =>
+			import(/* webpackChunkName: "contracts" */ '@/views/BillTo'),
+	},
+	{
 		path: '/invoiceDetail',
 		name: 'InvoiceDetail',
 		component: () =>

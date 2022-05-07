@@ -5,7 +5,6 @@ import store from './store';
 import { Quasar } from 'quasar';
 import quasarUserOptions from './quasar-user-options';
 import 'quasar/dist/quasar.sass';
-
 createApp(App)
 	.use(Quasar, quasarUserOptions)
 	.use(store)
