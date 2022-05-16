@@ -19,9 +19,7 @@
 			:search="search"
 			:rows="getContracts"
 			:columns="columns"
-			:dialog="dialog"
 			:loading="isLoading"
-			@updateIndex="updateIndex = $event"
 		/>
 	</div>
 </template>
@@ -52,6 +50,11 @@ export default {
 				editable: false,
 			},
 			{
+				name: 'projectName',
+				label: 'Project Name',
+				editable: true,
+			},
+			{
 				name: 'amount',
 				label: 'Contract Amount',
 				editable: true,
@@ -64,9 +67,6 @@ export default {
 		}),
 		columns() {
 			return useTableHeaders(this.tableHeaders);
-		},
-		dialog() {
-			return useDialog(this.columns, this.getContracts, this.updateIndex);
 		},
 	},
 	async created() {

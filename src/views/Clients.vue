@@ -19,9 +19,7 @@
 			:search="search"
 			:rows="getClients"
 			:columns="columns"
-			:dialog="dialog"
 			:loading="isLoading"
-			@updateIndex="updateIndex = $event"
 		/>
 	</div>
 </template>
@@ -70,9 +68,6 @@ export default {
 		}),
 		columns() {
 			return useTableHeaders(this.tableHeaders);
-		},
-		dialog() {
-			return useDialog(this.columns, this.getClients, this.updateIndex);
 		},
 	},
 	async created() {

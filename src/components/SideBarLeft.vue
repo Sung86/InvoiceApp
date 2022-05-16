@@ -9,7 +9,7 @@
 	>
 		<div class="row justify-center items-center q-mt-lg">
 			<q-avatar size="120px">
-				<img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+				<img src="@/assets/logo.png" />
 			</q-avatar>
 		</div>
 		<div class="q-px-md column q-mt-xl">
@@ -18,6 +18,9 @@
 				:key="index"
 				class="cursor-pointer q-mb-lg"
 				style="background-color: #f5eedc; border-radius: 20px; height: 110px"
+				:style="{
+					border: $route.path === navigation.path ? '2px solid blue' : 'none',
+				}"
 				flat
 				align="center"
 				@click="() => $router.push({ path: navigation.path })"

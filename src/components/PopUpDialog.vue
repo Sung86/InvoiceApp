@@ -1,5 +1,5 @@
 <template>
-	<q-dialog :model-value="true">
+	<q-dialog v-model="isShow">
 		<q-card style="min-width: 50%" class="q-px-md">
 			<q-card-section>
 				<div class="text-h6 text-center">{{ title }}</div>
@@ -21,12 +21,17 @@
 					<q-input
 						v-else-if="field.editable"
 						v-model="field.value"
+						:prefix="amountLabels.includes(field.label) ? '$' : ''"
 						outlined
 						no-error-icon
 						type="text"
 						:disable="currentAction !== ''"
 						:rules="[(val) => !!val || 'Field is required']"
 					/>
+					<span v-else-if="name === 'invoices' && field.label === 'Status'">
+						:
+						{{ renderStatus() }}
+					</span>
 					<span v-else>: {{ field.value }}</span>
 				</div>
 			</q-card-section>
@@ -59,8 +64,10 @@ export default {
 	},
 	data: () => ({
 		dataFields: [],
+		amountLabels: ['Contract Amount', 'Amount Paid'],
 		currentAction: '',
 		selectedClientDocId: '',
+		isShow: false,
 	}),
 	computed: {
 		...mapGetters({
@@ -75,7 +82,16 @@ export default {
 	},
 	watch: {
 		show(isShow) {
-			this.dataFields = isShow ? JSON.parse(JSON.stringify(this.fields)) : [];
+			if (isShow) {
+				this.dataFields = JSON.parse(JSON.stringify(this.fields));
+			} else {
+				this.setFields([]);
+				this.dataFields = [];
+			}
+			this.isShow = isShow;
+		},
+		isShow() {
+			this.setShow(this.isShow);
 		},
 	},
 	created() {
@@ -92,10 +108,11 @@ export default {
 		}),
 		...mapMutations({
 			setShow: 'popUpDialog/SET_SHOW',
+			setFields: 'popUpDialog/SET_FIELDS',
 		}),
 		onSelectedClient(client, field) {
-			field.value = client.name;
-			this.selectedClientDocId = client._id;
+			field.value = client?.name;
+			this.selectedClientDocId = client?._id;
 		},
 		async onAction(action) {
 			this.currentAction = action;
@@ -110,9 +127,7 @@ export default {
 				position: 'top',
 			};
 
-			const invalidFields = this.dataFields.filter(
-				(f) => f.value.trim() === ''
-			);
+			const invalidFields = this.dataFields.filter((f) => !f.value);
 			if (this.currentAction !== 'Cancel' && invalidFields.length <= 0) {
 				const isSuccess = await actions[action.toString().toLowerCase()]();
 				if (!isSuccess) {
@@ -130,6 +145,14 @@ export default {
 			else this.setShow(false);
 			this.currentAction = '';
 		},
+		renderStatus() {
+			const status =
+				this.dataFields[4].value >= this.dataFields[3].value
+					? 'Paid'
+					: 'Not Yet Paid';
+			this.dataFields[1].value = status;
+			return status;
+		},
 		async onCreate() {
 			const data = {};
 			this.dataFields.forEach((field) => {
@@ -141,9 +164,17 @@ export default {
 					`clients/${this.selectedClientDocId}`
 				);
 			}
+			let clientName;
+			if (this.name === 'contracts') {
+				clientName = data['clientName'];
+				delete data['clientName'];
+			}
 			const res = await addData(this.name, data);
-			if (res.state) {
-				if (this.name === 'contracts') delete data['clientRef'];
+			if (res.status) {
+				if (this.name === 'contracts') {
+					data['clientName'] = clientName;
+					delete data['clientRef'];
+				}
 				const newData = {
 					...data,
 					_id: res.docId,
@@ -155,28 +186,23 @@ export default {
 					data: newData,
 				});
 			}
-			return res.state;
+			return res.status;
 		},
 		async onUpdate() {
-			let keys = [];
-			if (this.name === 'clients') keys = ['name', 'abn', 'email'];
-			if (this.name === 'contracts') keys = ['amount'];
-			if (this.name === 'invoices') keys = ['amountPaid'];
-
+			const editableFields = this.dataFields.filter((f) => f.editable);
 			const data = {};
-			keys.forEach((key) => {
-				const field = this.dataFields.find((field) => field.key === key);
-				data[key] = field.value;
+			editableFields.forEach((f) => {
+				data[f.key] = f.value;
 			});
 
 			const res = await updateData(this.name, this.docId, data);
-			if (res.state) {
+			if (res.status) {
 				this.updateTableData({
 					tableName: this.name,
 					data: { ...data, _id: this.docId },
 				});
 			}
-			return res.state;
+			return res.status;
 		},
 	},
 };

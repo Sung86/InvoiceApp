@@ -41,9 +41,10 @@ const actions = {
 	},
 	async loadContracts({ commit }) {
 		const contracts = await getContracts().then((res) =>
-			res.map(({ _id, amount, contractNumber, client }) => ({
+			res.map(({ _id, amount, contractNumber, projectName, client }) => ({
 				_id,
 				contractNumber,
+				projectName,
 				clientName: client.name,
 				amount,
 			}))
@@ -60,12 +61,14 @@ const actions = {
 					invoiceAmount,
 					_id,
 					amountPaid,
+					pdfLink,
 				}) => ({
 					_id,
 					invoiceNumber,
 					clientName: client.name,
 					invoiceAmount,
 					amountPaid,
+					pdfLink,
 					invoiceDate: formatDate(invoiceDate.toDate()),
 				})
 			)

@@ -4,24 +4,55 @@
 		:columns="columns"
 		flat
 		bordered
-		class="table"
+		class="simple-table"
 		:filter="search"
 		separator="vertical"
 		:loading="loading"
 		color="primary"
 		virtual-scroll
-		rows-per-page-options="0"
+		:rows-per-page-options="[0]"
 	>
 		<template #body="props">
 			<q-tr :props="props">
 				<q-td v-for="col in props.cols" :key="col.name" :props="props">
-					<q-btn
-						v-if="col.field === 'actions'"
-						size="lg"
-						color="secondary"
-						label="编辑"
-						@click="onUpdate(props.rowIndex)"
-					/>
+					<div v-if="col.field === 'actions'" class="row justify-center">
+						<ButtonEdit
+							class="q-mr-md"
+							style="width: 10px"
+							@click="onUpdate(props.rowIndex)"
+						/>
+						<router-link
+							v-if="$route.path === '/contracts'"
+							:to="{
+								name: 'BillTo',
+								params: { contractId: props.row._id },
+							}"
+						>
+							<ButtonBill />
+						</router-link>
+					</div>
+					<span v-else-if="amountLables.includes(col.label)">
+						{{ formatPrice(col.value) }}
+					</span>
+					<span v-else-if="col.label === 'Invoice Number'">
+						<a :href="props.row.pdfLink" target="_blank">
+							{{ col.value }}
+						</a>
+						<a
+							:href="props.row.pdfLink"
+							target="_blank"
+							style="text-decoration: none"
+						>
+							<q-icon name="open_in_new" size="xs" />
+						</a>
+					</span>
+					<span v-else-if="name === 'invoices' && col.label === 'Status'">
+						{{
+							props.row.amountPaid >= props.row.invoiceAmount
+								? 'Paid'
+								: 'Not Yet Paid'
+						}}
+					</span>
 					<span v-else>
 						{{ col.value }}
 					</span>
@@ -33,7 +64,18 @@
 
 <script>
 import { mapMutations } from 'vuex';
+import { defineAsyncComponent } from 'vue';
+import { useDialog } from '@/helpers/common';
+import { priceFormatter } from '@/helpers/common';
 export default {
+	components: {
+		ButtonEdit: defineAsyncComponent(() =>
+			import('@/components/buttons/ButtonEdit')
+		),
+		ButtonBill: defineAsyncComponent(() =>
+			import('@/components/buttons/ButtonBill')
+		),
+	},
 	props: {
 		name: {
 			type: String,
@@ -43,10 +85,7 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-		dialog: {
-			type: Object,
-			default: () => {},
-		},
+
 		search: {
 			type: String,
 			default: '',
@@ -60,16 +99,17 @@ export default {
 			default: () => [],
 		},
 	},
-	emits: {
-		updateIndex: {
-			type: Number,
-			default: 0,
-		},
-	},
 	data: () => ({
 		currentUpdatedocId: '',
 		isShowDialog: false,
+		updateIndex: -1,
+		amountLables: ['Contract Amount', 'Amount Paid', 'Invoice Amount'],
 	}),
+	computed: {
+		dialog() {
+			return useDialog(this.columns, this.rows, this.updateIndex);
+		},
+	},
 	methods: {
 		...mapMutations({
 			setDialogDocId: 'popUpDialog/SET_DOC_ID',
@@ -80,23 +120,24 @@ export default {
 			setDialogTitle: 'popUpDialog/SET_TITLE',
 		}),
 		onUpdate(updateIndex) {
+			this.updateIndex = updateIndex;
 			this.setDialogDocId(this.rows[updateIndex]._id);
 			this.setDialogName(this.name);
 			this.setDialogFields(this.dialog.fields);
 			this.setDialogActions(['Cancel', 'Update']);
-			this.$emit('updateIndex', updateIndex);
 			let title;
 			if (this.name === 'clients') title = `编辑}客户`;
 			if (this.name === 'contracts') title = `编辑合同`;
 			this.setDialogTitle(title);
 			this.setDialogShow(true);
 		},
+		formatPrice: priceFormatter,
 	},
 };
 </script>
 
 <style lang="scss">
-.table {
+.simple-table {
 	.q-table__top,
 	th {
 		background-color: #f0f0f0;

@@ -4,6 +4,7 @@ import {
 	setPersistence,
 	signInWithEmailAndPassword,
 	browserLocalPersistence,
+	signOut,
 } from 'firebase/auth';
 
 const auth = getAuth();
@@ -29,4 +30,8 @@ export const logInWithEmailAndPassword = async (email, password) => {
 				status: false,
 			};
 		});
+};
+
+export const logout = async () => {
+	return await signOut(auth);
 };

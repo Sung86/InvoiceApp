@@ -24,35 +24,67 @@ export const useDialog = (columns, rows, rowIndex, forAction = 'update') => {
 };
 
 export const useTableHeaders = (headers) => {
-	const columns = [...headers, { name: 'actions', label: '' }];
+	const columns = [...headers, { name: 'actions', label: 'Actions' }];
 	const tableHeaders = columns.map((header) => ({
 		name: header.name,
 		label: header.label,
 		field: header.name,
 		align: 'center',
-		sortable: header.name === 'actions' ? true : false,
+		sortable: header.name === 'actions' ? false : true,
 		editable: header.editable,
+		style: {
+			width: header.name === 'actions' ? '140px' : 'auto',
+		},
 	}));
 
 	return tableHeaders;
 };
 
-export const generateContractNumber = async () => {
+const generateDocumentNumber = async (documents, field) => {
 	const time = new Date();
 	const tokenised = time.toISOString().slice(0, 10).split('-');
 	const year = tokenised[0];
 	const month = tokenised[1];
-	const day = tokenised[2];
+	const day = Number(tokenised[2]) + 1;
 
-	const contracts = await store.getters['simpleTable/getContracts'];
-	const todayContracts = contracts.filter(
-		(contract) =>
-			contract.contractNumber.toString().substring(0, 8) ===
-			`${year}${month}${day}`
+	const todayContracts = documents.filter(
+		(doc) => doc[field].toString().substring(0, 8) === `${year}${month}${day}`
 	);
 
 	const newQuantity = todayContracts.length + 1;
-	const contractId = (100 + newQuantity).toString().substring(1);
-	const contractNumber = `${year}${month}${day}${contractId}`;
-	return contractNumber;
+	const documentId = (100 + newQuantity).toString().substring(1);
+	const documentNumber = `${year}${month}${day}${documentId}`;
+	return documentNumber;
+};
+
+export const generateContractNumber = async () => {
+	await store.dispatch('simpleTable/loadContracts');
+	const contracts = await store.getters['simpleTable/getContracts'];
+	return await generateDocumentNumber(contracts, 'contractNumber');
+};
+
+export const generateInvoiceNumber = async () => {
+	await store.dispatch('simpleTable/loadInvoices');
+	const invoices = await store.getters['simpleTable/getInvoices'];
+	return await generateDocumentNumber(invoices, 'invoiceNumber');
+};
+
+export const priceFormatter = (price) => {
+	const result = new Intl.NumberFormat('en-AU', {
+		style: 'currency',
+		currency: 'AUD',
+		maximumFractionDigits: 2,
+		minimumFractionDigits: 1,
+	}).format(price);
+
+	const tokenized = result.split('.');
+	if (tokenized.length === 2) {
+		const decimals = tokenized[1];
+		if (decimals == 0) return tokenized[0];
+	}
+	return result;
+};
+
+export const validateDate = (date) => {
+	return /^\d\d\/\d\d\/\d\d\d\d$/.test(date);
 };

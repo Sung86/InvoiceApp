@@ -1,14 +1,7 @@
 <template>
 	<div class="q-pa-xl">
 		<div class="text-h5 text-weight-bold">Invoices</div>
-		<div class="q-my-lg row justify-between align-items-center">
-			<q-btn
-				color="secondary"
-				size="lg"
-				class="q-px-lg text-capitalize"
-				label="Bill To"
-				:to="{ path: '/billTo' }"
-			/>
+		<div class="q-my-lg row justify-end align-items-center">
 			<q-input v-model="search" outlined dense debounce="300" bg-color="white">
 				<template #prepend>
 					<q-icon name="search" />
@@ -20,16 +13,14 @@
 			:search="search"
 			:rows="getInvoices"
 			:columns="columns"
-			:dialog="dialog"
 			:loading="isLoading"
-			@updateIndex="updateIndex = $event"
 		/>
 	</div>
 </template>
 
 <script>
 import { defineAsyncComponent } from 'vue';
-import { useDialog, useTableHeaders } from '@/helpers/common';
+import { useTableHeaders } from '@/helpers/common';
 import { mapGetters, mapActions } from 'vuex';
 export default {
 	components: {
@@ -45,6 +36,11 @@ export default {
 			{
 				name: 'invoiceNumber',
 				label: 'Invoice Number',
+				editable: false,
+			},
+			{
+				name: 'status',
+				label: 'Status',
 				editable: false,
 			},
 			{
@@ -75,9 +71,6 @@ export default {
 		}),
 		columns() {
 			return useTableHeaders(this.tableHeaders);
-		},
-		dialog() {
-			return useDialog(this.columns, this.getInvoices, this.updateIndex);
 		},
 	},
 	async created() {

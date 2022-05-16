@@ -8,6 +8,9 @@
 		:behavior="$q.platform.is.ios ? 'dialog' : 'menu'"
 		@filter="onFilter"
 		@update:model-value="onSelectClient"
+		clearable
+		no-error-icon
+		:rules="[(val) => !!val || 'Field is required']"
 	>
 		<template #no-option>
 			<q-item>

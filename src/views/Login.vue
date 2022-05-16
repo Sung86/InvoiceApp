@@ -1,59 +1,65 @@
 <template>
-	<q-page class="row justify-center items-center">
-		<div class="absolute-full text-subtitle2 flex flex-center">
-			<q-card class="q-px-xl q-pb-xl q-pt-md flat" style="min-width: 50%">
-				<q-card-section class="text-dark">
-					<div class="text-h3 text-center">Sign In</div>
-					<div v-if="isSignInError" class="text-red text-center text-h6">
-						Invalid Account
-					</div>
-					<q-form class="q-gutter-md" @submit="onSignIn()">
-						<div class="text-h5">Email:</div>
-						<q-input
-							v-model="email"
-							outlined
-							lazy-rules
-							type="email"
-							hide-bottom-space
-							:rules="rules"
-							:disable="isOnSubmit"
-						/>
-
-						<div class="text-h5 q-mt-md">Password:</div>
-						<q-input
-							v-model="password"
-							outlined
-							:type="isShowPassword ? 'text' : 'password'"
-							hide-bottom-space
-							lazy-rules
-							:rules="rules"
-						>
-							<template #append>
-								<q-icon
-									:name="isShowPassword ? 'visibility_off' : 'visibility'"
-									class="cursor-pointer"
-									@click="isShowPassword = !isShowPassword"
-								/>
-							</template>
-						</q-input>
-
-						<div class="row justify-center q-mt-lg">
-							<q-btn
-								push
-								class="text-capitalize q-px-xl"
-								color="primary"
-								type="submit"
-								label="SignIn"
-								size="1.3rem"
-								:loading="isOnSubmit"
+	<div class="row justify-center items-center">
+		<q-img
+			src="@/assets/logo.png"
+			style="height: 100vh; width: 100vw"
+			fit="fill"
+		>
+			<div class="absolute-full text-subtitle2 flex flex-center">
+				<q-card class="q-px-lg q-pb-md flat" style="min-width: 60%">
+					<q-card-section class="text-dark">
+						<div class="text-center text-h4 q-mt-sm q-mb-lg">My IT Studio</div>
+						<div v-if="isSignInError" class="text-red text-center text-h6">
+							Invalid Account
+						</div>
+						<q-form class="q-gutter-md" @submit="onSignIn()">
+							<div class="text-h5">Email:</div>
+							<q-input
+								v-model="email"
+								outlined
+								lazy-rules
+								type="email"
+								no-error-icon
+								:rules="rules"
 								:disable="isOnSubmit"
 							/>
-						</div>
-					</q-form>
-				</q-card-section>
-			</q-card>
-		</div>
-	</q-page>
+
+							<div class="text-h5 q-mt-md">Password:</div>
+							<q-input
+								v-model="password"
+								outlined
+								:type="isShowPassword ? 'text' : 'password'"
+								lazy-rules
+								no-error-icon
+								:rules="rules"
+							>
+								<template #append>
+									<q-icon
+										:name="isShowPassword ? 'visibility_off' : 'visibility'"
+										class="cursor-pointer"
+										@click="isShowPassword = !isShowPassword"
+									/>
+								</template>
+							</q-input>
+
+							<div class="row justify-center q-mt-lg">
+								<q-btn
+									push
+									class="text-capitalize q-px-xl"
+									color="primary"
+									type="submit"
+									label="Sign In"
+									size="1.3rem"
+									:loading="isOnSubmit"
+									:disable="isOnSubmit"
+								/>
+							</div>
+						</q-form>
+					</q-card-section>
+				</q-card>
+			</div>
+		</q-img>
+	</div>
 </template>
 
 <script>

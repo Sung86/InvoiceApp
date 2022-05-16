@@ -1,10 +1,12 @@
 <template>
-	<q-layout view="lHh Lpr lFf">
+	<q-layout view="lHh Lpr lFf" style="height: 100vh">
 		<Header v-if="isSignIn" @toggleSideBar="isShowSideBar = !isShowSideBar" />
 		<SideBarLeft v-if="isSignIn" :show="isShowSideBar" />
-		<q-page-container style="height: 100vh" class="bg-grey-2">
-			<PopUpDialog v-if="show" />
-			<router-view />
+		<q-page-container style="min-height: inherit" class="bg-grey-2">
+			<PopUpDialog />
+			<q-page>
+				<router-view />
+			</q-page>
 		</q-page-container>
 	</q-layout>
 </template>
@@ -17,12 +19,12 @@ export default {
 		SideBarLeft: defineAsyncComponent(() => import('@/components/SideBarLeft')),
 		PopUpDialog: defineAsyncComponent(() => import('@/components/PopUpDialog')),
 	},
+
 	data: () => ({
 		isShowSideBar: true,
 	}),
 	computed: {
 		...mapGetters({
-			show: 'popUpDialog/getShow',
 			isSignIn: 'user/getIsSignIn',
 		}),
 	},

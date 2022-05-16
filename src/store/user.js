@@ -1,4 +1,4 @@
-import { logInWithEmailAndPassword } from '@/apis/authentication';
+import { logInWithEmailAndPassword, logout } from '@/apis/authentication';
 
 const initialState = () => ({
 	user: {},
@@ -9,12 +9,12 @@ const state = () => initialState();
 
 const getters = {
 	getUser: (state) => state.user,
-	getIsSignIn: (state) => state.isLogin,
+	getIsSignIn: (state) => state.isSignIn,
 };
 
 const mutations = {
 	SET_USER: (state, val) => (state.user = val),
-	SET_IS_SIGN_IN: (state, val) => (state.isLogin = val),
+	SET_IS_SIGN_IN: (state, val) => (state.isSignIn = val),
 	RESET_USER_STATE: (state) => {
 		const newState = initialState();
 		Object.keys(newState).forEach((key) => {
@@ -37,7 +37,8 @@ const actions = {
 		}
 		return false;
 	},
-	signOut({ commit }) {
+	async signOut({ commit }) {
+		await logout();
 		commit('RESET_USER_STATE');
 	},
 };
