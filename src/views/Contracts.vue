@@ -5,7 +5,8 @@
 			<q-btn
 				color="secondary"
 				size="lg"
-				label="录入新合同"
+				label="Create"
+				class="text-capitalize"
 				@click="onOpenCreateDialog"
 			/>
 			<q-input v-model="search" outlined dense debounce="300" bg-color="white">

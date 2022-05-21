@@ -6,7 +6,7 @@ import { Quasar } from 'quasar';
 import quasarUserOptions from './quasar-user-options';
 import 'quasar/dist/quasar.sass';
 
-document.title = 'Invoice App | My IT Studio';
+document.title = 'Tassie Web | Invoice System';
 createApp(App)
 	.use(Quasar, quasarUserOptions)
 	.use(store)

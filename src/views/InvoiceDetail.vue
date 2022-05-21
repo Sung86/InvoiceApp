@@ -10,10 +10,10 @@
 						<span class="text-h5 text-bold"> MY IT STUDIO </span>
 					</div>
 					<div class="column q-mt-md">
-						<span>5b Magnet Court, Sandy Bay, TAS</span>
-						<span>www.my-it.com.au</span>
-						<span>Tel: 03 6169 5503</span>
-						<span>Email: info@my-it.com.au</span>
+						<span>3 Castray Esplanade, Battery Point TAS 7004</span>
+						<span>www.tassieweb.com</span>
+						<span>Tel: 03 5566 7778</span>
+						<span>Email: info@tassieweb.com</span>
 					</div>
 				</div>
 				<div class="col-1"></div>
@@ -21,7 +21,7 @@
 					<div class="column">
 						<div class="column q-mb-xl">
 							<span class="text-h6 text-bold">INVOICE</span>
-							<span>ABN : 32688122013</span>
+							<span>ABN : 56687879813</span>
 						</div>
 						<div class="column">
 							<span>Date: {{ invoiceDate }}</span>
@@ -78,19 +78,19 @@
 				<div>Thank you for your business!</div>
 				<div>Payment may be made in the following way:</div>
 				<div>Bank: CBA - Commonwealth bank</div>
-				<div>Account Name: My It Studio</div>
-				<div>BSB: 067000</div>
-				<div>Account Number: 1104-2385</div>
+				<div>Account Name: Tassie Web</div>
+				<div>BSB: 064499</div>
+				<div>Account Number: 1202-4943</div>
 			</div>
 		</div>
 	</div>
 	<div class="row justify-center">
 		<q-btn
 			push
-			class="q-my-xl"
+			class="q-my-xl text-capitalize"
 			color="green"
 			type="submit"
-			label="生成PDF"
+			label="Produce PDF"
 			size="1.3rem"
 			@click="onGenerateInvoicePDF()"
 		/>

@@ -8,7 +8,9 @@
 			<div class="absolute-full text-subtitle2 flex flex-center">
 				<q-card class="q-px-lg q-pb-md flat" style="min-width: 60%">
 					<q-card-section class="text-dark">
-						<div class="text-center text-h4 q-mt-sm q-mb-lg">My IT Studio</div>
+						<div class="text-center text-h4 q-mt-sm q-mb-lg">
+							Tassie Web - Invoice System
+						</div>
 						<div v-if="isSignInError" class="text-red text-center text-h6">
 							Invalid Account
 						</div>

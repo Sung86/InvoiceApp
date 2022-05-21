@@ -27,7 +27,13 @@
 					<span class="text-subtitle1 q-mr-md"> Invoice Due Date: </span>
 					<InputDate @date="(val) => (invoiceDueDate = val)" />
 				</div>
-				<q-btn color="secondary" size="lg" label="新增条目" @click="addRow()" />
+				<q-btn
+					color="secondary"
+					size="lg"
+					label="Add"
+					class="text-capitalize"
+					@click="addRow()"
+				/>
 			</div>
 			<q-table
 				:rows="rows"
@@ -125,7 +131,7 @@
 				<q-btn
 					color="secondary"
 					size="md"
-					label="生成 Invoice"
+					label="Produce Invoice"
 					class="text-capitalize"
 					:disable="!rows.length || !checkDate(invoiceDueDate)"
 					@click="onCreateInvoice()"
