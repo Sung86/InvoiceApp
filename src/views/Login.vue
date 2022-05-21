@@ -1,10 +1,6 @@
 <template>
 	<div class="row justify-center items-center">
-		<q-img
-			src="@/assets/logo.png"
-			style="height: 100vh; width: 100vw"
-			fit="fill"
-		>
+		<div class="background-image">
 			<div class="absolute-full text-subtitle2 flex flex-center">
 				<q-card class="q-px-lg q-pb-md flat" style="min-width: 60%">
 					<q-card-section class="text-dark">
@@ -60,7 +56,7 @@
 					</q-card-section>
 				</q-card>
 			</div>
-		</q-img>
+		</div>
 	</div>
 </template>
 
@@ -92,4 +88,11 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.background-image {
+	height: 100vh;
+	width: 100vw;
+	background-repeat: repeat;
+	background-image: url('../assets/logo.png');
+}
+</style>
